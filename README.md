@@ -45,7 +45,7 @@ Quarton `freeze: true` säilyttää laskentatulokset. Suorita muuttuneen laskenn
 
 ## Tarkistuksen tila
 
-10.10.2026: GitHub-pluginin yhdistetty identiteetti vahvistettiin tiliksi **PetriRautiainen** ja tälle tilille perustettiin julkinen **PetriRautiainen.github.io**-repo. Ensimmäinen GitHub Actions -ajo ja Pages-julkaisu ovat vielä tarkistamatta.
+10.10.2026: GitHub-pluginin yhdistetty identiteetti vahvistettiin tiliksi **PetriRautiainen** ja tälle tilille perustettiin julkinen **PetriRautiainen.github.io**-repo. Ensimmäinen [Quarto-rakennus ja Pages-julkaisu](https://github.com/PetriRautiainen/PetriRautiainen.github.io/actions/runs/37993073455) onnistui. Sivusto avautuu osoitteessa https://petrirautiainen.github.io.
 
 Julkinen versio ja luonnosten esikatselu rakennettiin Quarto 1.9.38:lla. Tarkistusversiot ovat `_site-check` ja `_preview-check`; niitä ei viedä GitHubiin. Molemmissa on yhdeksän HTML-sivua. Tarkistus vahvisti seuraavat asiat:
 
@@ -58,4 +58,8 @@ Julkinen versio ja luonnosten esikatselu rakennettiin Quarto 1.9.38:lla. Tarkist
 
 Paikallisen suoritusympäristön rajoitus esti Quarton tietokantavälimuistin käytön. Vain paikallisessa tarkistustyökalussa tietokantavälimuisti vaihdettiin muistiin ja muu välimuisti työskentelykansioon. Projektin lähdekoodi ja GitHub Actionsin Quarto-asennus eivät sisällä tätä muutosta.
 
-Paikallinen esikatselu ei ollut saavutettavissa Codexin selaimessa. Ulkoasun tarkistus tehdään julkaistusta Pages-sivustosta; ulkoasua ei ole vielä vahvistettu.
+Julkaistusta sivustosta tarkistettiin yhdeksän HTML-sivua (kahdeksan sisältösivua ja tyhjä luonnossivu) sekä 19 linkitettyä sivua ja resurssia: kaikki vastasivat HTTP 200. Luonnoksen sisältö puuttuu julkisesta HTML:stä ja hakutiedostosta. Selainhaku löytää Minusta-sivun, mutta ei normaalijakaumaluonnosta.
+
+Ulkoasu tarkistettiin julkaistusta sivustosta selaimessa: etusivu, Minusta, analyysilista ja Riskienhallinta-aihesivu. Etusivu ja avautuva navigaatiovalikko tarkistettiin myös 390 × 844 pikselin puhelinnäkymässä. Julkaistuja analyysiartikkeleita ei vielä ole; ainoa esimerkkikirjoitus säilyy luonnoksena.
+
+Paikallinen esikatselu ei ollut saavutettavissa Codexin selaimessa. Visuaalinen tarkistus tehtiin siksi julkaistusta Pages-sivustosta. Muuttamaton Quarto 1.9.38 toimii GitHub Actionsissa ilman paikallisen tarkistustyökalun välimuistisovitusta.
