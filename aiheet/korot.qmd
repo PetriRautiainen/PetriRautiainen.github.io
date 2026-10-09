@@ -1,0 +1,18 @@
+---
+title: "Korot"
+toc: false
+listing:
+  contents: "../posts/**/*.qmd"
+  include:
+    categories: Korot
+  type: default
+  fields: [title, description, date]
+  sort: "date desc"
+---
+
+Korkojen muutokset, kassavirrat ja korkosijoitusten riskit. Miten valittu mittari tai skenaario muuttaa tarkastelua?
+
+::: {.editorial-note}
+Tähän kootaan aiheeseen liittyvät kirjoitukset niiden valmistuttua.
+:::
+

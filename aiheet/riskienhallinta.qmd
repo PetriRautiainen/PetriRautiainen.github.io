@@ -1,0 +1,18 @@
+---
+title: "Riskienhallinta"
+toc: false
+listing:
+  contents: "../posts/**/*.qmd"
+  include:
+    categories: Riskienhallinta
+  type: default
+  fields: [title, description, date]
+  sort: "date desc"
+---
+
+Jakaumat, volatiliteetti ja skenaariot. Mitä riskimittari kertoo, mitä se jättää ulkopuolelle ja miten sen tulkinta muuttuu oletusten mukana?
+
+::: {.editorial-note}
+Tähän kootaan aiheeseen liittyvät kirjoitukset niiden valmistuttua.
+:::
+

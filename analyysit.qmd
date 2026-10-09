@@ -1,0 +1,15 @@
+---
+title: "Analyysit"
+toc: false
+listing:
+  contents: posts
+  type: default
+  sort: "date desc"
+  categories: true
+  fields: [title, description, date, categories]
+  date-format: "D.M.YYYY"
+  filter-ui: true
+---
+
+Kysymyksiä, vertailuja ja havaintoja sijoittamisesta. Kirjoitukset yhdistävät aineiston, analyysin ja tulosten tulkinnan.
+

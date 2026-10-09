@@ -1,0 +1,15 @@
+/_site/
+/_preview/
+/_site-check/
+/_preview-check/
+/.quarto/
+/__pycache__/
+/.venv/
+/.env
+/.env.*
+!.env.example
+/data/raw/
+*.log
+
+
+**/*.quarto_ipynb

@@ -1,0 +1,21 @@
+---
+title: "Minusta"
+toc: false
+---
+
+::: {.lead}
+Olen Petri Rautiainen, rahoitusalan analyytikko. Minua kiinnostaa, miten data auttaa ymmärtämään sijoittamista ja miten analyysin tulokset esitetään selkeästi.
+:::
+
+## Osaamiseni
+
+Substanssiosaamiseni painottuu osakesijoittamiseen, kiinteistösijoittamiseen ja faktorisijoittamiseen. Analyysissä yhdistän sijoituskysymysten ymmärtämisen, aineiston käsittelyn ja menetelmien kriittisen arvioinnin.
+
+Opintojeni aikana aloitin ohjelmoinnin R:llä. Olen jatkanut osaamiseni kehittämistä itsenäisesti muun muassa DataCampin ja Courseran avulla ja laajentanut sitä Pythoniin, koneoppimiseen ja tilastolliseen analyysiin.
+
+Työssäni käytän pääasiassa Microsoft 365:n analyysityökaluja, erityisesti Power BI:tä. Sivuston työnäytteet toteutan omassa ympäristössäni henkilökohtaisilla työkaluilla.
+
+## Tämä sivusto
+
+Kirjoitukset ovat henkilökohtaisia. Käytän julkisia, käyttötarkoitukseen sallittuja aineistoja tai erikseen merkittyjä esimerkkiaineistoja. Työnäytteet eivät perustu työnantajani aineistoihin, järjestelmiin tai sisäiseen sisältöön.
+

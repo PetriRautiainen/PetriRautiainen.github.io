@@ -1,0 +1,61 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "*.qmd"
+    - "aiheet/*.qmd"
+    - "posts/**/*.qmd"
+    - "!templates/"
+
+lang: fi
+
+website:
+  title: "Petri Rautiainen"
+  site-url: "https://petrirautiainen.github.io"
+  description: "Kysymyksiä datasta, sijoittamisesta ja riskistä. Petri Rautiaisen henkilökohtainen analyysisivusto."
+  draft-mode: gone
+  search: true
+  sidebar:
+    style: floating
+    title: "Petri Rautiainen"
+    search: true
+    contents:
+      - href: index.qmd
+        text: "Aloita tästä"
+      - href: analyysit.qmd
+        text: "Kaikki analyysit"
+      - section: "Aiheet"
+        contents:
+          - href: aiheet/data.qmd
+            text: "Data"
+          - href: aiheet/osakkeet.qmd
+            text: "Osakkeet"
+          - href: aiheet/korot.qmd
+            text: "Korot"
+          - href: aiheet/vaihtoehtoiset.qmd
+            text: "Vaihtoehtoiset sijoitukset"
+          - href: aiheet/riskienhallinta.qmd
+            text: "Riskienhallinta"
+      - href: minusta.qmd
+        text: "Minusta"
+  page-footer:
+    left: "© Petri Rautiainen"
+    right: "Henkilökohtainen sivusto. Näkemykset ovat omiani."
+
+format:
+  html:
+    theme: [cosmo, theme.scss]
+    toc: true
+    toc-title: "Tässä kirjoituksessa"
+    code-fold: true
+    code-summary: "Näytä analyysikoodi"
+    code-copy: true
+    highlight-style: github
+    link-external-newwindow: true
+    smooth-scroll: true
+
+execute:
+  freeze: true
+  warning: false
+  error: false
+

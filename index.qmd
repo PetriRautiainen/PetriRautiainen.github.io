@@ -1,0 +1,41 @@
+---
+title: "Kysymyksiä datasta, sijoittamisesta ja riskistä"
+toc: false
+---
+
+::: {.eyebrow}
+Petri Rautiainen · Analyysit ja havainnot
+:::
+
+::: {.lead}
+Entä jos oletus ei pidäkään? Tarkastelen sijoittamisen kysymyksiä datan, havainnollisten vertailujen ja kriittisen tulkinnan avulla.
+:::
+
+Olen rahoitusalan analyytikko. Tällä henkilökohtaisella sivustolla yhdistän sijoitusosaamista, tilastollista analyysiä ja datan esittämistä. Kirjoituksissa kysymys ohjaa menetelmän valintaa. Koodi ja laskenta ovat mukana silloin, kun ne auttavat perustelemaan havaintoja.
+
+## Mistä kirjoitan?
+
+::: {.topic-list}
+**[Data](aiheet/data.qmd)** — Mistä aineisto tulee, mitä se mittaa ja miten sen laatua arvioidaan?
+
+**[Osakkeet](aiheet/osakkeet.qmd)** — Tuotot, arvostus, faktorit ja johtopäätösten herkkyys oletuksille.
+
+**[Korot](aiheet/korot.qmd)** — Korkojen muutokset, kassavirrat ja korkosijoitusten riskit.
+
+**[Vaihtoehtoiset sijoitukset](aiheet/vaihtoehtoiset.qmd)** — Kiinteistöt, likviditeetti ja harvoin päivittyvien arvojen tulkinta.
+
+**[Riskienhallinta](aiheet/riskienhallinta.qmd)** — Jakaumat, volatiliteetti, skenaariot ja mittareiden rajoitteet.
+:::
+
+## Miten analyysit rakentuvat?
+
+Jokainen kirjoitus alkaa rajatusta kysymyksestä. Esittelen aineiston ja oletukset, vertaan vaihtoehtoja ja selitän, mitä tuloksista voi päätellä. Lopuksi tarkastelen rajoitteita ja kysymyksiä, joita analyysi jättää avoimiksi.
+
+Analyysikoodin voi avata kirjoituksen yhteydessä. Lähteet ja aineiston ajankohta dokumentoidaan, jotta havaintojen taustaa voi arvioida.
+
+[Tutustu taustaani](minusta.qmd) · [Selaa analyysejä](analyysit.qmd)
+
+::: {.editorial-note}
+Sivusto on rakenteilla. Ensimmäiset kirjoitukset ilmestyvät tänne niiden valmistuttua.
+:::
+

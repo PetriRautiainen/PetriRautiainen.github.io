@@ -1,0 +1,32 @@
+---
+title: "Kirjoituksen tutkimuskysymys"
+description: "Yksi virke siitä, mitä kirjoitus auttaa ymmärtämään."
+date: 2026-10-09
+categories: [Data]
+draft: true
+---
+
+## Kysymys
+
+Mitä tarkastellaan ja miksi se on kiinnostavaa?
+
+## Aineisto ja oletukset
+
+Lähde, käyttöehdot, havaintojakso, hakupäivä, frekvenssi, yksiköt, korjaukset ja rajaukset. Merkitse simuloitu aineisto näkyvästi.
+
+## Vertailu
+
+Esitä yksi ajatus tai kuvio kerrallaan. Pidä koodi avattavana ja kaavat vähäisinä.
+
+## Havainnot ja tulkinta
+
+Erota laskettu havainto tulkinnasta. Tarkastele herkkyyttä vaihtoehtoisille oletuksille.
+
+## Rajoitteet ja jatkokysymykset
+
+Mitä ei voi päätellä? Mikä olisi seuraava kysymys?
+
+## Lähteet
+
+Linkit alkuperäisiin lähteisiin ja aineiston dokumentaatioon.
+

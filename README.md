@@ -19,7 +19,7 @@ Aiheet ovat Data, Osakkeet, Korot, Vaihtoehtoiset sijoitukset, Riskienhallinta j
 
 ## Automaattinen julkaisu
 
-Repo on julkinen ja julkaisu käyttää maksutonta GitHub Pagesia. Pagesin lähteeksi asetetaan **Settings → Pages → Build and deployment → Source → GitHub Actions**.
+Repo on julkinen ja julkaisu käyttää maksutonta GitHub Pagesia. Pagesin lähteeksi on asetettu **Settings → Pages → Build and deployment → Source → GitHub Actions**.
 
 `.github/workflows/publish.yml` rakentaa sivuston `main`-haaran päivityksistä ja julkaisee onnistuneen rakennuksen Pagesiin. Pull requestit rakennetaan ilman julkaisua. Ajon voi käynnistää myös käsin Actions-välilehdeltä. GitHub asentaa muuttamattoman virallisen Quarton.
 

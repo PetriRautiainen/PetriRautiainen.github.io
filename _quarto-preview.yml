@@ -1,0 +1,6 @@
+# Local previews show drafts. The public build uses the default profile.
+project:
+  output-dir: _preview
+website:
+  draft-mode: visible
+

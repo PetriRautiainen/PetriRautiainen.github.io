@@ -1,0 +1,18 @@
+---
+title: "Osakkeet"
+toc: false
+listing:
+  contents: "../posts/**/*.qmd"
+  include:
+    categories: Osakkeet
+  type: default
+  fields: [title, description, date]
+  sort: "date desc"
+---
+
+Tuotot, arvostus ja faktorisijoittaminen. Mitä havainnoista voi päätellä, ja kuinka paljon johtopäätös riippuu ajanjaksosta tai oletuksista?
+
+::: {.editorial-note}
+Tähän kootaan aiheeseen liittyvät kirjoitukset niiden valmistuttua.
+:::
+

@@ -1,0 +1,18 @@
+---
+title: "Data"
+toc: false
+listing:
+  contents: "../posts/**/*.qmd"
+  include:
+    categories: Data
+  type: default
+  fields: [title, description, date]
+  sort: "date desc"
+---
+
+Mistä aineisto tulee, mitä se mittaa ja miten sitä korjataan? Datan hakeminen, laadun arviointi ja käsittely ovat analyysin ensimmäisiä kysymyksiä.
+
+::: {.editorial-note}
+Tähän kootaan aiheeseen liittyvät kirjoitukset niiden valmistuttua.
+:::
+

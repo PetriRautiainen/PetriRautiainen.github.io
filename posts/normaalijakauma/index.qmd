@@ -1,0 +1,74 @@
+---
+title: "Entä jos tuotot eivät noudata normaalijakaumaa?"
+description: "Esimerkkiluonnos: sama volatiliteetti voi peittää erilaisen tappioriskin."
+date: 2026-10-09
+categories: [Riskienhallinta, Osakkeet]
+draft: true
+---
+
+::: {.callout-note}
+## Esimerkkiluonnos
+Tämä kirjoitus havainnollistaa sivuston esitystapaa. Vertailussa on kaksi matemaattista esimerkkimallia. Tulokset eivät kuvaa havaittua markkina-aineistoa.
+:::
+
+::: {.lead}
+Jos kahden tuottomallin keskiarvo ja volatiliteetti ovat samat, ovatko myös niiden suuret tappiot yhtä yleisiä?
+:::
+
+## Aloitetaan samasta volatiliteetista
+
+Volatiliteetti tiivistää tuottojen hajontaa yhteen lukuun. Se ei yksin määritä koko tuottojakaumaa. Kysymystä voi tarkastella vertaamalla kahta mallia, joiden keskiarvo on nolla ja keskihajonta yksi:
+
+- **Normaalijakauma:** yksi tavallinen normaalijakauma.
+- **Seosjakauma:** 95 prosenttia kapeasta normaalijakaumasta ja 5 prosenttia leveästä normaalijakaumasta. Seos skaalataan samaan keskihajontaan vertailumallin kanssa.
+
+Seos kuvaa tässä matemaattista vaihtoehtoa, jossa suurin osa havainnoista on lähellä keskiarvoa, mutta osa vaihtelee paljon enemmän.
+
+## Kuinka usein tappio ylittää kolme keskihajontaa?
+
+Normaalimallissa todennäköisyys alittaa −3 on noin **0,135 prosenttia**. Tässä seosmallissa vastaava todennäköisyys on noin **1,07 prosenttia**. Samasta volatiliteetista huolimatta tämän rajan alittaminen on seosmallissa noin kahdeksan kertaa niin todennäköistä.
+
+<details>
+<summary>Näytä analyysikoodi</summary>
+
+```python
+from math import sqrt
+from statistics import NormalDist
+
+weight = 0.95
+sigma_calm, sigma_wide = 0.5, 3.5
+scale = sqrt(weight * sigma_calm**2 + (1 - weight) * sigma_wide**2)
+threshold = -3
+
+normal_tail = NormalDist().cdf(threshold)
+mixture_tail = (
+    weight * NormalDist(sigma=sigma_calm / scale).cdf(threshold)
+    + (1 - weight) * NormalDist(sigma=sigma_wide / scale).cdf(threshold)
+)
+print(f"Normaalimalli: {100 * normal_tail:.3f} %")
+print(f"Seosmalli: {100 * mixture_tail:.3f} %")
+```
+
+</details>
+
+Tässä −3 tarkoittaa kolmea keskihajontaa keskiarvon alapuolella, ei kolmen prosentin tuottoa. Vertailu koskee yhtä mallin havaintojaksoa.
+
+## Mitä vertailusta voi päätellä?
+
+Keskiarvon ja volatiliteetin yhtäläisyys ei takaa samanlaista tappioiden jakaumaa. Jos riskitulkinta perustuu normaalijakaumaan, tulkinta riippuu myös tämän oletuksen sopivuudesta.
+
+Esimerkki ei osoita, että seosmalli olisi jonkin sijoituskohteen oikea malli. Sen tehtävä on näyttää, mitä yksi yhteenvetomittari jättää kertomatta.
+
+## Mitä kysyisin seuraavaksi?
+
+- Miten havaittu tuottojakauma eroaa normaalimallista?
+- Muuttuuko tulos, kun havaintojakso on päivä, viikko tai kuukausi?
+- Kuinka paljon havaintoja tarvitaan harvinaisten tappioiden arviointiin?
+- Entä jos suuret tappiot esiintyvät ryppäinä?
+
+## Rajaukset ja lähde
+
+Mallit ovat symmetrisiä eivätkä kuvaa ajallista riippuvuutta. Niiden parametrit on valittu havainnollistamista varten. Empiirinen jatkoanalyysi tarvitsee erikseen valittavan aineiston, tarkistettavat käyttöehdot ja kuviot.
+
+Laskenta käyttää Pythonin standardikirjaston [`NormalDist`-luokkaa](https://docs.python.org/3/library/statistics.html#statistics.NormalDist).
+

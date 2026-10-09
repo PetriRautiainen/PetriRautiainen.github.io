@@ -1,0 +1,18 @@
+---
+title: "Vaihtoehtoiset sijoitukset"
+toc: false
+listing:
+  contents: "../posts/**/*.qmd"
+  include:
+    categories: "Vaihtoehtoiset sijoitukset"
+  type: default
+  fields: [title, description, date]
+  sort: "date desc"
+---
+
+Kiinteistöt ja muut vaihtoehtoiset sijoitukset. Miten likviditeetti, arvostuskäytännöt ja havaintojen harva päivittyminen vaikuttavat analyysiin?
+
+::: {.editorial-note}
+Tähän kootaan aiheeseen liittyvät kirjoitukset niiden valmistuttua.
+:::
+
