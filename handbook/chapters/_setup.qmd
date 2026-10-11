@@ -1,0 +1,6 @@
+```{r}
+#| label: setup
+#| include: false
+source("R/load.R")
+example <- load_example()
+```

@@ -1,0 +1,68 @@
+# Combining Time Series
+
+{{< include _setup.qmd >}}
+
+## Problem
+
+A daily market series and a monthly macroeconomic series cannot be joined meaningfully by exact dates. A naive inner join can discard nearly every daily observation. Forward filling the macro series can also imply that a month's value was known before publication.
+
+## Principle
+
+Choose the target period and aggregation rule first. Preserve the distinction between an observation date and a join key. Make join losses visible and do not impute values without a specific analytical reason.
+
+## Example
+
+We aggregate currency rates to the **last recorded reference observation in each completed calendar month**. “Last” does not mean “last non-missing”. HICP already has one observation per month. Both are keyed by observation month.
+
+The last common finite month determines the endpoint. A complete 120-month grid defines the ten-year window. The default full alignment retains missing months as explicit rows, so the requested window cannot shrink silently.
+
+```{r}
+#| label: alignment-result
+example$aligned$audit[c("start", "end", "requested_months", "output_rows", "join", "imputed_values")]
+knitr::kable(tail(example$aligned$data[c("date", "market", "inflation", "market_observation_date",
+                                       "market_observations", "inflation_source_statuses")], 6),
+  col.names = c("Month", "USD per EUR", "HICP", "FX observed", "FX records", "HICP status"))
+```
+
+## Code
+
+```r
+aligned <- align_timeseries(market, inflation,
+  years = 10L, market_method = "last", join = "full",
+  as_of = "2026-10-11")
+```
+
+`market_method = "mean"` instead computes the arithmetic mean of all recorded observations within a month. It preserves NA if any input is missing. This is a different question from a month-end reference level. Neither calculation reconstructs a traded closing price.
+
+```{r}
+#| label: aggregation-audit
+example$aligned$audit$market_aggregation
+example$aligned$audit[c("market_months_outside_window", "inflation_months_outside_window",
+                       "absent_market_months", "absent_inflation_months", "dropped_by_join")]
+```
+
+## Checks
+
+The output includes `market_observation_date`, the number of daily records available in the monthly period, missing-source counts and retained provider status codes. For last-observation aggregation, only the final recorded value determines the level; the record count describes coverage. A presence flag distinguishes a genuinely absent monthly record from an existing record whose value is NA.
+
+```{r}
+#| label: alignment-contract
+stopifnot(nrow(example$aligned$data) == 120L,
+          anyDuplicated(example$aligned$data$date) == 0L,
+          !is.unsorted(example$aligned$data$date),
+          example$aligned$audit$imputed_values == 0L)
+```
+
+Inner and left joins are available as deliberate alternatives. Their dropped dates are recorded in `dropped_by_join`. This does not solve publication timing: a point-in-time analysis needs release dates and appropriate vintages before any as-of join.
+
+## Common mistakes
+
+- Aggregating a partial current month alongside completed months.
+- Choosing the last non-missing observation and concealing a missing final value.
+- Forward filling a released monthly value into days before it was available.
+- Confusing weekend closure with missing business-day data.
+- Reporting 120 months of history after a join has removed months without disclosure.
+
+## Takeaway
+
+Alignment is an analytical transformation, not a clerical join. The output should show which periods exist, which values are missing and what the transformation discarded.

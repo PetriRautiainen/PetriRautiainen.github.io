@@ -1,0 +1,40 @@
+# A dataset you can defend {.unnumbered}
+
+This working handbook starts with a question: **what evidence makes a dataset reliable enough to analyse?** A successful download is only the beginning. We need to know what the values mean, preserve the source response, inspect transformations and test failure modes.
+
+Part I builds a small R pipeline around two real public series: a daily EUR/USD reference exchange rate and a monthly euro-area consumer price index. The result is a documented ten-year monthly dataset, a reusable diagnostic object and validation plots. This is a data-quality exercise; it makes no investment recommendation.
+
+## The working contract {.unnumbered}
+
+Each chapter follows **Problem → Principle → Example → Code → Checks → Common mistakes → Takeaway**. The reusable functions live in `R/`; code shown in the book calls those functions rather than maintaining a second implementation.
+
+| Stage | Function | Inspectable output |
+|---|---|---|
+| Acquire | `get_market_data()`, `get_inflation_data()` | Original CSV and request metadata |
+| Standardize | `clean_timeseries()` | Typed, ordered observations and cleaning audit |
+| Diagnose | `check_timeseries()` | Dates, gaps, missing values, range and changes |
+| Align | `align_timeseries()` | Monthly table and transformation audit |
+| Inspect | `plot_timeseries()` | Separate panels with missing periods visible |
+
+Downloads are explicit. Rendering reads a previously created local example and does not contact the data provider. It verifies the retained raw checksums and the R code/lockfile fingerprint, so changed inputs require an explicit rebuild. A refresh obtains the latest available vintage; replaying a saved snapshot reproduces that snapshot. These are different operations.
+
+## Run the example {.unnumbered}
+
+From the repository's `handbook/` directory:
+
+```bash
+Rscript --vanilla scripts/bootstrap.R
+Rscript scripts/run-tests.R
+Rscript scripts/run-example.R
+quarto render
+```
+
+Use `Rscript scripts/run-example.R --offline` to replay the retained raw responses. Use `--refresh` deliberately to replace them and record a new retrieval time and checksum. Keep the old snapshot separately before refreshing if its vintage matters.
+
+The package versions are recorded in the handbook's own `renv.lock`. R 4.4.1 and Quarto 1.9.38 were used for this milestone; `renv` records the R version but does not install R or Quarto.
+
+## Boundaries {.unnumbered}
+
+The original Finnish website and its GitHub Pages workflow remain separate. This book is an unpublished subproject. Raw and processed files stay local by default, and no employer resources or private credentials are used. Part II will later address returns, real returns, rolling statistics and modelling. Part I establishes the data contract first.
+
+Source and usage documentation: [ECB data API](https://data.ecb.europa.eu/help/api/data-examples), [ESCB statistics reuse](https://www.ecb.europa.eu/stats/ecb_statistics/governance_and_quality_framework/html/usage_policy.en.html), [Eurostat reuse](https://ec.europa.eu/eurostat/help/copyright-notice), [renv](https://rstudio.github.io/renv/articles/renv.html).

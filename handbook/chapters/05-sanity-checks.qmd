@@ -1,0 +1,61 @@
+# Sanity Checks
+
+{{< include _setup.qmd >}}
+
+## Problem
+
+A pipeline may finish successfully while producing an unordered series, a missing month or an implausible jump. An assertion catches a chosen failure; a diagnostic object makes several kinds of evidence available for review.
+
+## Principle
+
+Return diagnostics as data. Make assumptions and thresholds explicit. A flagged observation is a question to investigate, not permission to delete it.
+
+## Example
+
+```{r}
+#| label: monthly-diagnostics
+knitr::kable(diagnostics_table(example$checks$monthly_market), caption = "Monthly currency reference levels")
+knitr::kable(diagnostics_table(example$checks$monthly_inflation), caption = "Monthly HICP levels")
+```
+
+Daily missing-period detection is deliberately limited. It reports missing weekdays as **candidates** and does not know the provider's holiday calendar. Monthly detection reports internal absent months. Neither claims that missing observations at the requested boundaries have been detected.
+
+## Code
+
+```{r}
+#| label: structured-diagnostics
+check <- check_timeseries(example$market, jump_threshold = 0.10)
+check$missing_periods_note
+head(check$missing_periods, 8)
+check$suspicious_jumps
+```
+
+`check_timeseries()` returns a `timeseries_check` list with dates, counts, estimated and expected frequency, ordering, duplicates, missing/non-finite values, gap candidates, minimum, maximum and suspicious changes. Estimated frequency is a heuristic, not authoritative metadata.
+
+The change flag compares adjacent ordered observations using `(current - previous) / abs(previous)`. A zero denominator produces an undefined change and is reported separately. No statistical claim is attached to the default 10% threshold.
+
+## Checks
+
+A synthetic stress case demonstrates that the function does not mistake a successful computation for clean data:
+
+```{r}
+#| label: synthetic-stress-case
+stress <- data.frame(date = as.Date(c("2024-03-01", "2024-01-01", "2024-01-01")),
+                     value = c(20, 1, NA))
+stress_check <- check_timeseries(stress, frequency = "monthly")
+stress_check[c("ordered", "duplicate_dates", "missing_values", "missing_periods")]
+```
+
+Run `Rscript scripts/run-tests.R` from the handbook directory. Tests check meaningful failure modes without live downloads. Diagnostic reporting tolerates duplicate dates so it can expose them; cleaning and aggregation reject them before transformations.
+
+## Common mistakes
+
+- Treating every large change as a data error.
+- Inferring a daily holiday calendar from spacing alone.
+- Counting NA values but failing to detect rows that never arrived.
+- Using one threshold for every asset and unit without review.
+- Calling a heuristic frequency estimate a verified source frequency.
+
+## Takeaway
+
+Diagnostics turn assumptions into inspectable evidence. Review the object, investigate exceptions and keep the decision to alter data separate from the decision to flag it.

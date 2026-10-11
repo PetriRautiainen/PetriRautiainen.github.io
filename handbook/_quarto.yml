@@ -1,0 +1,48 @@
+project:
+  type: book
+  output-dir: _book
+  execute-dir: project
+  resources:
+    - "!data/**"
+    - "!renv/**"
+    - "!tests/**"
+    - "!R/**"
+    - "!scripts/**"
+
+lang: en
+book:
+  title: "The Analyst's Handbook"
+  subtitle: "Part I — Building Reliable Data"
+  author: "Petri Rautiainen"
+  chapters:
+    - index.qmd
+    - part: "Building Reliable Data"
+      chapters:
+        - chapters/01-getting-data.qmd
+        - chapters/02-understanding-data.qmd
+        - chapters/03-cleaning-standardizing.qmd
+        - chapters/04-combining-timeseries.qmd
+        - chapters/05-sanity-checks.qmd
+        - chapters/06-visual-validation.qmd
+  search: true
+  page-footer: "Working draft · Data validation before investment conclusions"
+
+format:
+  html:
+    theme: [cosmo, handbook.scss]
+    toc: true
+    number-sections: true
+    code-fold: true
+    code-summary: "Show R code"
+    code-copy: true
+    fig-format: png
+    fig-width: 9
+    fig-height: 6
+    fig-dpi: 150
+
+execute:
+  freeze: false
+  cache: false
+  error: false
+  warning: true
+  message: false

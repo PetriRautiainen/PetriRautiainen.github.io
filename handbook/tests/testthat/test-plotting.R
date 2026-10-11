@@ -1,0 +1,16 @@
+testthat::test_that("monthly plots insert gaps and refuse silent frequency loss", {
+  x <- data.frame(date = as.Date(c("2024-01-01", "2024-03-01")), market = c(1, 2), inflation = c(100, 102))
+  path <- tempfile(fileext = ".pdf")
+  grDevices::pdf(path)
+  on.exit({grDevices::dev.off(); unlink(path)})
+  plotted <- plot_timeseries(x)
+  testthat::expect_equal(nrow(plotted), 3L)
+  testthat::expect_true(is.na(plotted$market[2]))
+  testthat::expect_true(is.na(plotted$inflation[2]))
+  x$date[1] <- as.Date("2024-01-02")
+  testthat::expect_error(plot_timeseries(x), "aggregate daily")
+  x$date[1] <- as.Date("2024-01-01"); x$market[1] <- Inf
+  testthat::expect_error(plot_timeseries(x), "Non-finite")
+  x$market <- c(NA, NA)
+  testthat::expect_error(plot_timeseries(x), "numeric|finite")
+})

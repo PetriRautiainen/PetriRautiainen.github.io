@@ -17,6 +17,10 @@ Quarto-versio on 1.9.38, sama kuin GitHub Actionsissa.
 
 Aiheet ovat Data, Osakkeet, Korot, Vaihtoehtoiset sijoitukset, Riskienhallinta ja Minusta. Sivusto on henkilökohtainen eikä käytä työnantajan järjestelmiä, aineistoja tai tunnuksia.
 
+## Erillinen englanninkielinen käsikirja
+
+`handbook/` sisältää julkaisemattoman Quarto-kirjan **The Analyst's Handbook — Part I: Building Reliable Data**. Sen kuusi lukua, R-putki, testit ja `renv`-ympäristö ovat erillisiä. Käyttö- ja renderöintiohjeet ovat [käsikirjan README-tiedostossa](handbook/README.md). Juurihakemiston rakennus rajaa koko käsikirjakansion pois sekä sivuista että kopioitavista resursseista. Pages-työnkulku säilyy ennallaan.
+
 ## Automaattinen julkaisu
 
 Repo on julkinen ja julkaisu käyttää maksutonta GitHub Pagesia. Pagesin lähteeksi on asetettu **Settings → Pages → Build and deployment → Source → GitHub Actions**.

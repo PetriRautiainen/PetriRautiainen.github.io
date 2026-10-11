@@ -1,0 +1,65 @@
+# Visualization as Data Validation
+
+{{< include _setup.qmd >}}
+
+## Problem
+
+A table of summary statistics can conceal a gap, a change of scale or a break in the series. A chart with two arbitrary vertical axes can create an apparent relationship by choosing convenient limits.
+
+## Principle
+
+Use visual inspection as a second form of validation. Show the full period, label the units and let missing periods interrupt the line. Separate scales when the quantities are fundamentally different.
+
+## Example
+
+The following panels cover the same ten-year monthly window. They are derived from the retained ECB and Eurostat responses: the currency panel uses the last recorded reference observation per completed month, while HICP retains its monthly level.
+
+```{r}
+#| label: fig-level-validation
+#| fig-cap: "Derived monthly validation panels. Sources: ECB reference exchange rates; Eurostat HICP via ECB. Independent vertical scales; no claim about co-movement or investment returns."
+plot_timeseries(example$aligned)
+```
+
+## Code
+
+Both series can also be rebased to 100 at their first common finite, non-zero observation. The original values remain available. Normalization permits a comparison of level paths, but it does not make unlike series economically equivalent.
+
+```{r}
+#| label: common-normalization
+normalized <- normalize_series(example$aligned$data)
+attr(normalized, "baseline_date")
+head(normalized, 3)
+```
+
+```{r}
+#| label: fig-normalized-validation
+#| fig-cap: "Derived level indices, common baseline = 100. Separate panels preserve the distinction between a currency reference level and a consumer price index."
+plot_timeseries(example$aligned, normalized = TRUE)
+```
+
+## Checks
+
+`plot_timeseries()` accepts standardized monthly dates and inserts absent monthly rows into a plotting grid so a line does not silently bridge a missing month. Aggregate daily inputs first. Red ticks mark missing plotted values. The following **synthetic fault** is added only to a copy of the output; it does not modify the stored data:
+
+```{r}
+#| label: fig-synthetic-gap
+#| fig-cap: "Synthetic missing-month example for validating the plotting behaviour. This is not a missing observation reported by the source."
+with_gap <- example$aligned$data
+with_gap$market[60] <- NA_real_
+plot_timeseries(with_gap, columns = "market",
+  labels = "Synthetic fault: one missing monthly currency value")
+```
+
+Inspect a chart for sustained scale shifts, isolated spikes, suspicious flat stretches and breaks around source changes. Then inspect the relevant raw rows and metadata. The plot suggests where to investigate; it does not establish why a change occurred.
+
+## Common mistakes
+
+- Interpolating a gap to make the chart look tidy.
+- Treating matching shapes on independently scaled axes as a correlation result.
+- Using dual axes without a justified transformation and explicit labelling.
+- Normalizing each series at a different date without disclosure.
+- Presenting an inserted diagnostic fault as an empirical source finding.
+
+## Takeaway
+
+A clear validation chart exposes what the pipeline did. Preserve gaps, document scales and resolve unexplained patterns before moving to formal investment analysis.

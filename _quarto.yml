@@ -6,6 +6,9 @@ project:
     - "aiheet/*.qmd"
     - "posts/**/*.qmd"
     - "!templates/"
+    - "!handbook/"
+  resources:
+    - "!handbook/**"
 
 lang: fi
 

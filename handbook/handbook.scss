@@ -1,0 +1,13 @@
+/*-- scss:defaults --*/
+$body-bg: #fbfaf7;
+$body-color: #26343b;
+$link-color: #265b74;
+$headings-font-family: Georgia, serif;
+$font-size-base: 1.04rem;
+$line-height-base: 1.65;
+/*-- scss:rules --*/
+h1, h2, h3 { font-weight: 400; }
+.sidebar-title { font-family: Georgia, serif; }
+pre { font-size: .85rem; }
+.quarto-title-block .subtitle { color: #637078; }
+table { font-variant-numeric: tabular-nums; }

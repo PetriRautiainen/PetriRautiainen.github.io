@@ -1,0 +1,14 @@
+/_book/
+/_freeze/
+/.quarto/
+/.bootstrap-library/
+/data/raw/*.csv
+/data/raw/*.rds
+/data/processed/*
+!/data/processed/.gitkeep
+/.Rhistory
+/.RData
+*.log
+/renv/cache-root/
+
+**/*.quarto_ipynb

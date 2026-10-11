@@ -1,0 +1,77 @@
+# Understanding What You Downloaded
+
+{{< include _setup.qmd >}}
+
+## Problem
+
+Joining two columns labelled “price” can produce a precise calculation with an incorrect interpretation. Before transforming values, write down what one observation actually represents.
+
+## Principle
+
+Data definitions belong in the analytical contract. Record the measured quantity, unit, frequency, reference area, date convention, adjustment and vintage. A title is helpful, but the dimensions and attributes provide the operational definition.
+
+| Distinction | Question before analysis | Our example |
+|---|---|---|
+| Price vs total return | Are income and reinvestment included? | EUR/USD is a reference exchange rate; no dividends, interest or investment total return |
+| Index level vs growth rate | Is the number a level or a percentage change? | HICP is an index level; inflation rates are a later transformation |
+| Nominal vs real | Has purchasing power been adjusted? | These raw values are not inflation-adjusted investment results |
+| Daily vs monthly | Is the observation a point or a period measure? | Daily currency reference observations and a monthly consumer price index |
+| Observation vs publication date | When did the event occur, and when was the value knowable? | Observation periods are supplied; row-level release dates are not reconstructed |
+| Revised vs unrevised | Is this the vintage available at the historical decision date? | Latest available values at retrieval, potentially revised |
+
+## Example
+
+One unit of the market series means dollars per euro. Inverting that rate changes the economic interpretation and must be an explicit transformation. One HICP observation denotes a month, not a price measured on the first day of that month. We use month-start dates as join keys only.
+
+The provider's base period is retained with the download. A rebase changes index levels without itself changing underlying price growth. Combining differently based vintages without documenting the conversion creates an artificial break.
+
+```{r}
+#| label: inspect-provider-attributes
+example$market$metadata$provider_attributes
+example$inflation$metadata$provider_attributes
+```
+
+The current HICP response identifies its base as **2025 = 100** in `UNIT_INDEX_BASE`. Observation status also matters: `E` denotes an estimated value. The latest row in the retained milestone snapshot carries that flag, so the example includes an available estimate rather than assuming every value is final. Status codes stay in the cleaned and aligned data.
+
+```{r}
+#| label: inspect-observation-status
+knitr::kable(tail(example$inflation$data, 3))
+table(example$inflation$data$observation_status)
+```
+
+## Code
+
+```{r}
+#| label: source-semantics
+example$market$metadata[c("unit", "interpretation", "frequency", "vintage")]
+example$inflation$metadata[c("unit", "interpretation", "frequency", "vintage")]
+```
+
+Use these metadata fields when labelling a chart or report. The source adapters reject a changing unit or non-zero unit multiplier until an explicit treatment is implemented. They do not guess how to rescale an unfamiliar response.
+
+## Checks
+
+```{r}
+#| label: date-coverage
+knitr::kable(data.frame(
+  series = c("Daily EUR/USD", "Monthly HICP"),
+  first_observation = c(as.character(min(example$market$data$date)), as.character(min(example$inflation$data$date))),
+  last_observation = c(as.character(max(example$market$data$date)), as.character(max(example$inflation$data$date))),
+  missing_values = c(sum(is.na(example$market$data$value)), sum(is.na(example$inflation$data$value)))))
+```
+
+Compare observed coverage with the requested period; an API request ending on a given date does not guarantee that observations exist up to that date. The current worked example is anchored to the explicit request end `2026-10-11`, while its actual common endpoint is determined by the returned data.
+
+## Common mistakes
+
+- Reading an HICP index value as a year-on-year percentage.
+- Calling a currency reference-rate change an equity return.
+- Treating observation-month alignment as evidence that the monthly statistic was available then.
+- Ignoring revisions or a change in euro-area composition.
+- Dividing a currency rate by HICP and describing the result as a fully defined real exchange-rate investment strategy. A proper real exchange-rate measure needs a precise specification and relevant price measures.
+
+## Takeaway
+
+Two series can share a date column and still measure different things. Define the quantities before you calculate with them. This dataset supports an observation-period illustration, not a point-in-time backtest.
+
+Sources: [ECB exchange-rate series definition](https://data.ecb.europa.eu/data/datasets/EXR/EXR.D.USD.EUR.SP00.A), [Euro-area HICP definition](https://data.ecb.europa.eu/data/datasets/HICP/HICP.M.U2.N.000000.4D0.INX), [Eurostat September 2026 flash estimate](https://ec.europa.eu/eurostat/web/products-euro-indicators/w/2-02102026-ap), [ECB observation-status definitions](https://www.ecb.europa.eu/press/bpm6/pdf/ecb.bpm6202504~bfebd19808.sk.pdf).

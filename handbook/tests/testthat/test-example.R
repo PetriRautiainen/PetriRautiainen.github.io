@@ -1,0 +1,17 @@
+testthat::test_that("rendering refuses stale pipeline output or changed raw data", {
+  root <- tempfile(); dir.create(root)
+  withr::local_dir(root)
+  on.exit(unlink(root, recursive = TRUE), add = TRUE)
+  dir.create("R"); dir.create("data"); dir.create("data/raw"); dir.create("data/processed")
+  writeLines("# first implementation", "R/example.R"); writeLines("{}", "renv.lock")
+  writeLines("snapshot", "data/raw/source.csv")
+  metadata <- list(raw_file = "source.csv", checksum_md5 = unname(tools::md5sum("data/raw/source.csv")))
+  result <- list(market = list(metadata = metadata), inflation = list(metadata = metadata),
+                 pipeline_fingerprint = pipeline_fingerprint())
+  saveRDS(result, "data/processed/example.rds")
+  testthat::expect_identical(load_example(), result)
+  writeLines("changed snapshot", "data/raw/source.csv")
+  testthat::expect_error(load_example(), "snapshot is missing or changed")
+  writeLines("# second implementation", "R/example.R")
+  testthat::expect_error(load_example(), "Pipeline or lockfile changed")
+})

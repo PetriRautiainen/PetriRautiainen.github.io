@@ -1,0 +1,70 @@
+# Cleaning and Standardizing
+
+{{< include _setup.qmd >}}
+
+## Problem
+
+An apparently numeric CSV column can contain blanks, a colon for missingness, decimal commas or a thousands separator. A date column can contain duplicate observations or an impossible day. Silent coercion turns these problems into an unexplained change in the dataset.
+
+## Principle
+
+Be strict about the input contract and conservative about alterations. Preserve missing values, reject ambiguous numeric conventions, resolve duplicates deliberately and record any reordering. Cleaning should produce a table you can inspect and an account of how it differs from the input.
+
+## Example
+
+Our canonical table uses `date` as R's `Date` type and `value` as numeric. Monthly dates denote month starts. Provider observation-status codes remain attached when available. The raw data remain unchanged in `data/raw/`.
+
+```{r}
+#| label: cleaning-results
+head(example$market$data, 5)
+head(example$inflation$data, 5)
+example$market$metadata$cleaning
+example$inflation$metadata$cleaning
+```
+
+## Code
+
+```r
+market <- clean_timeseries(market_raw)
+inflation <- clean_timeseries(inflation_raw)
+```
+
+The underlying `standardize_timeseries()` also accepts other data frames when their column names and frequency are supplied explicitly. This is the reusable boundary for CSV-based sources; the ECB adapter remains a separate acquisition concern.
+
+```{r}
+#| label: explicit-standardization
+small_raw <- data.frame(
+  month = c("2024-03", "2024-01", "2024-02"),
+  level = c("102.0", "100.0", ":"))
+small_clean <- standardize_timeseries(small_raw,
+  date_col = "month", value_col = "level", frequency = "monthly")
+small_clean
+attr(small_clean, "cleaning_audit")
+```
+
+The missing token is recognised, but nothing is imputed. The rows are reordered and the audit records that operation. Numeric text must use an explicit decimal point and may use scientific notation; text such as `1,200` is rejected because its meaning is ambiguous without a declared convention.
+
+## Checks
+
+```{r}
+#| label: cleaning-contract
+stopifnot(inherits(example$market$data$date, "Date"),
+          is.numeric(example$market$data$value),
+          !is.unsorted(example$market$data$date),
+          anyDuplicated(example$market$data$date) == 0L,
+          example$market$metadata$cleaning$imputed_values == 0L)
+```
+
+The tests exercise impossible dates, duplicated months, empty tables, missing values, malformed numeric text and non-finite numbers. They use small synthetic inputs and require no network access.
+
+## Common mistakes
+
+- Calling `as.numeric()` on a factor or ignoring coercion warnings.
+- Keeping the first duplicate because it happens to occur first in the file.
+- Filling every blank with zero.
+- Reordering a table without retaining an audit record.
+- Treating a sorted daily table as proof that it has a complete trading calendar.
+
+## Takeaway
+
+Cleaning makes the contract explicit. It does not make an uncertain observation certain. Preserve the evidence and stop when the necessary interpretation is missing.

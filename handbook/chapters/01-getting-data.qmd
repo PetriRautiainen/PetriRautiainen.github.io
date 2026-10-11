@@ -1,0 +1,75 @@
+# Getting Data
+
+{{< include _setup.qmd >}}
+
+## Problem
+
+A copied spreadsheet can contain correct numbers and still be impossible to reproduce. The URL may have changed, a filter may be undocumented or the downloaded values may have been revised. We need a source response and a record of exactly what was requested.
+
+## Principle
+
+Choose a provider for the meaning and provenance of its data before choosing a convenient R package. An API is a transport, not a guarantee of suitability. A CSV is a file format, not a data definition.
+
+Useful starting points for free public data include the [ECB Data Portal](https://data.ecb.europa.eu/), [Eurostat](https://ec.europa.eu/eurostat/data/database) and [FRED](https://fred.stlouisfed.org/). For any series, check the original producer, usage terms, required credentials, history length, release schedule and revision policy. Do not assume that a financial index distributed by a public portal is free to redistribute: third-party rights can still apply.
+
+## Example
+
+We use the ECB's daily **EUR/USD reference rate**, series `EXR.D.USD.EUR.SP00.A`, and Eurostat's monthly **all-items euro-area HICP index**, distributed through the ECB as `HICP.M.U2.N.000000.4D0.INX`. The latter uses the newer HICP data flow; older examples may refer to the previous ICP flow and a different index base. We request the exact series and retain its provider attributes rather than silently substituting another series.
+
+The currency rate is a concrete market-price example. It is not a stock-market index. HICP measures consumer prices for a changing-composition euro area. Both downloads use the documented public CSV endpoint without a private API key.
+
+```{r}
+#| label: download-manifest
+#| echo: false
+manifest <- data.frame(
+  series = c("EUR/USD reference rate", "Euro-area HICP"),
+  source_key = c(paste(example$market$metadata$flow, example$market$metadata$key, sep = "."),
+                 paste(example$inflation$metadata$flow, example$inflation$metadata$key, sep = ".")),
+  rows = c(example$market$metadata$rows, example$inflation$metadata$rows),
+  retrieved_utc = c(example$market$metadata$retrieved_at_utc, example$inflation$metadata$retrieved_at_utc))
+knitr::kable(manifest)
+```
+
+## Code
+
+Run acquisition explicitly before rendering:
+
+```r
+source("R/load.R")
+market_raw <- get_market_data(start = "2015-01-01", end = "2026-10-11")
+inflation_raw <- get_inflation_data(start = "2015-01-01", end = "2026-10-11")
+market_raw$metadata$request_url
+market_raw$metadata$checksum_md5
+```
+
+The adapter in `R/sources.R` writes the original response unchanged, checks that the CSV contains the requested series key, and stores metadata beside it. It retries a failed download three times and reports an error if none succeeds. A requested refresh does **not** quietly substitute an old cache.
+
+```{r}
+#| label: raw-response
+head(example$market_raw$data[c("KEY", "TIME_PERIOD", "OBS_VALUE")], 4)
+head(example$inflation_raw$data[c("KEY", "TIME_PERIOD", "OBS_VALUE")], 4)
+```
+
+## Checks
+
+The cache must contain both the response and its manifest. Replay checks the recorded MD5 against the file before parsing it. This checksum detects accidental changes; it is not a cryptographic authenticity guarantee. HTTPS remains enabled for retrieval.
+
+```{r}
+#| label: inspect-request
+example$market$metadata[c("request_url", "requested_start", "requested_end", "raw_file", "checksum_md5")]
+```
+
+Archive the two raw CSVs and their RDS manifests together if a particular vintage must be retained. Git ignores these local files by default. Re-downloading the same URL later may produce different values.
+
+## Common mistakes
+
+- Treating a portal's availability as permission to redistribute every third-party series.
+- Recording only the ticker and omitting the endpoint, units, filters and retrieval date.
+- Overwriting the only historical snapshot during a refresh.
+- Calling a current download a point-in-time dataset.
+
+## Takeaway
+
+The acquisition deliverable is **observations plus provenance**. Keep the unchanged response, the exact request and an integrity check before cleaning anything.
+
+Sources: [EUR/USD series](https://data.ecb.europa.eu/data/datasets/EXR/EXR.D.USD.EUR.SP00.A), [HICP series](https://data.ecb.europa.eu/data/datasets/HICP/HICP.M.U2.N.000000.4D0.INX), [API examples](https://data.ecb.europa.eu/help/api/data-examples), [ECB reuse conditions](https://www.ecb.europa.eu/stats/ecb_statistics/governance_and_quality_framework/html/usage_policy.en.html), [Eurostat copyright and reuse](https://ec.europa.eu/eurostat/help/copyright-notice).
